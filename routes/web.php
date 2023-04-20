@@ -26,12 +26,17 @@ use App\Http\Controllers\AdminController;
 |
 */
 
-Route::get('/', function () {
-    return view('auth.login');
-});
-
 Auth::routes();
-Route::get('/home', [HomeController::class, 'index'])->name('home');
+
+
+Route::group(['middleware'=>['auth','checkloginActive']],function (){
+
+    Route::get('/', function () {return view('auth.login');});
+
+    Route::get('/home', [HomeController::class, 'index'])->name('home');
+
+
+});
 
 
 Route::resource('/invoices',InvoicesController::class);
